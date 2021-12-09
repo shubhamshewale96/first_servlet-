@@ -5,12 +5,14 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @WebServlet(
         description="Login Servlet testing",
         urlPatterns={"/LoginServlet"},
         initParams = {
-                @WebInitParam(name = "user",value = "shubham"),
+              /*  @WebInitParam(name = "user",value = "shubham"),*/
                 @WebInitParam(name = "pass",value = "shewale")
                 }
         ) /*(name = "LoginServlet", value = "/LoginServlet")*/
@@ -21,9 +23,12 @@ public class LoginServlet extends HttpServlet {
     String user= request.getParameter("user");
     String pass= request.getParameter("pass");
 
-    String userId = getServletConfig().getInitParameter("user");
+    //String userId = getServletConfig().getInitParameter("user");
     String password= getServletConfig().getInitParameter("pass");
-    if (userId.equals(user) && password.equals(pass)){
+
+    Pattern namePattern = Pattern.compile("^[A-Z]{1}[a-z]{2,}$");
+    Matcher nameMatcher = namePattern.matcher(user);
+    if (nameMatcher.find() && password.equals(pass)){
         request.setAttribute("user",user);
         request.getRequestDispatcher("LoginSuccess.jsp").forward(request,response);
     }else {
