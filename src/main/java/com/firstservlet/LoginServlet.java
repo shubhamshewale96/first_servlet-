@@ -10,11 +10,11 @@ import java.util.regex.Pattern;
 
 @WebServlet(
         description="Login Servlet testing",
-        urlPatterns={"/LoginServlet"},
-        initParams = {
-              /*  @WebInitParam(name = "user",value = "shubham"),*/
+        urlPatterns={"/LoginServlet"}
+        /*initParams = {
+                @WebInitParam(name = "user",value = "shubham"),
                 @WebInitParam(name = "pass",value = "shewale")
-                }
+                }*/
         ) /*(name = "LoginServlet", value = "/LoginServlet")*/
 
 public class LoginServlet extends HttpServlet {
@@ -24,11 +24,14 @@ public class LoginServlet extends HttpServlet {
     String pass= request.getParameter("pass");
 
     //String userId = getServletConfig().getInitParameter("user");
-    String password= getServletConfig().getInitParameter("pass");
+    //String password= getServletConfig().getInitParameter("pass");
 
     Pattern namePattern = Pattern.compile("^[A-Z]{1}[a-z]{2,}$");
     Matcher nameMatcher = namePattern.matcher(user);
-    if (nameMatcher.find() && password.equals(pass)){
+
+    Pattern passPattern = Pattern.compile("^(?=.*[A-Z]){1}(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%!]).{8,}$");
+    Matcher passMatcher = passPattern.matcher(pass);
+    if (nameMatcher.find() && passMatcher.find()){
         request.setAttribute("user",user);
         request.getRequestDispatcher("LoginSuccess.jsp").forward(request,response);
     }else {
